@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>NumberVi Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d26;
+      --border: rgba(255,255,255,0.1);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.5);
+      --brand: #e87722;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* LOGIN */
+    #login-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 20px;
+    }
+    .login-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px; width: 100%; max-width: 380px;
+      text-align: center;
+    }
+    .login-box .logo {
+      font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .login-box .logo em { color: var(--brand); font-style: italic; }
+    .login-box p { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+    .login-box input {
+      width: 100%; padding: 12px 16px; border-radius: 10px;
+      border: 1px solid var(--border); background: rgba(0,0,0,0.3);
+      color: var(--text); font-family: inherit; font-size: 15px;
+      margin-bottom: 12px; outline: none;
+    }
+    .login-box input:focus { border-color: var(--brand); }
+    .login-error { color: var(--danger); font-size: 13px; margin-bottom: 10px; min-height: 20px; }
+
+    /* APP */
+    #app { display: none; }
+    .topbar {
+      background: rgba(15,17,23,0.95); border-bottom: 1px solid var(--border);
+      padding: 14px 24px; display: flex; align-items: center;
+      justify-content: space-between; position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .topbar .logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .topbar .logo em { color: var(--brand); font-style: italic; }
+    .topbar .badge {
+      background: rgba(232,119,34,0.15); color: var(--brand);
+      border: 1px solid rgba(232,119,34,0.3); border-radius: 999px;
+      padding: 3px 12px; font-size: 12px; font-weight: 600;
+    }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+    .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 54px); }
+    .sidebar {
+      border-right: 1px solid var(--border); padding: 20px 0;
+      background: rgba(0,0,0,0.2); position: sticky; top: 54px;
+      height: calc(100vh - 54px); overflow-y: auto;
+    }
+    .sidebar-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--muted);
+      text-transform: uppercase; padding: 0 20px 10px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; cursor: pointer; font-size: 14px;
+      color: var(--muted); border-left: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+    .nav-item.active { color: var(--brand); border-left-color: var(--brand); background: rgba(232,119,34,0.06); }
+    .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-sep { height: 1px; background: var(--border); margin: 12px 20px; }
+
+    .content { padding: 32px; max-width: 860px; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .panel-title {
+      font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .panel-desc { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px; margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 14px; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); }
+
+    label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.4px; text-transform: uppercase; }
+    input[type="text"], textarea, input[type="email"] {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); background: rgba(0,0,0,0.3);
+      color: var(--text); font-family: inherit; font-size: 14px;
+      outline: none; transition: border-color 0.15s;
+    }
+    input[type="text"]:focus, textarea:focus { border-color: var(--brand); }
+    textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
+    .field { margin-bottom: 16px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+
+    /* Color picker */
+    .color-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .color-preview {
+      width: 44px; height: 44px; border-radius: 10px;
+      border: 2px solid rgba(255,255,255,0.15); cursor: pointer;
+      position: relative; overflow: hidden; flex-shrink: 0;
+    }
+    .color-preview input[type="color"] {
+      position: absolute; inset: -4px; width: calc(100% + 8px);
+      height: calc(100% + 8px); border: none; cursor: pointer;
+      opacity: 0; padding: 0; margin: 0;
+    }
+    .color-info { flex: 1; }
+    .color-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .color-hex { font-size: 12px; color: var(--muted); font-family: monospace; }
+
+    /* Toggle switch */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px;
+    }
+    .toggle-info { flex: 1; }
+    .toggle-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .toggle-desc { font-size: 12px; color: var(--muted); }
+    .toggle {
+      position: relative; width: 44px; height: 24px;
+      background: rgba(255,255,255,0.1); border-radius: 999px;
+      cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+    }
+    .toggle.on { background: var(--brand); }
+    .toggle::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: white; transition: transform 0.2s;
+    }
+    .toggle.on::after { transform: translateX(20px); }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px; border-radius: 8px; font-family: inherit;
+      font-size: 14px; font-weight: 600; cursor: pointer; border: none;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--brand); color: #111; }
+    .btn-primary:hover { background: #f08a35; }
+    .btn-secondary {
+      background: rgba(255,255,255,0.07); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+    .btn-danger { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+    .btn-danger:hover { background: rgba(239,68,68,0.25); }
+
+    .actions { display: flex; gap: 10px; margin-top: 20px; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 20px; font-size: 14px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(34,197,94,0.4); }
+    .toast.error { border-color: rgba(239,68,68,0.4); }
+    .toast-icon { font-size: 18px; }
+
+    /* Section templates */
+    .template-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+    .template-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+      cursor: pointer; transition: all 0.15s; background: rgba(0,0,0,0.2);
+    }
+    .template-card:hover { border-color: var(--brand); background: rgba(232,119,34,0.06); }
+    .template-icon { font-size: 24px; margin-bottom: 8px; }
+    .template-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .template-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* Preview bar */
+    .preview-bar {
+      background: rgba(232,119,34,0.08); border: 1px solid rgba(232,119,34,0.2);
+      border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px;
+    }
+    .preview-bar a { color: var(--brand); font-weight: 600; text-decoration: none; }
+    .preview-bar a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .field-row { grid-template-columns: 1fr; }
+      .template-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="logo">NUMBER<em>VI</em></div>
+    <p>Panel de administración</p>
+    <div class="login-error" id="login-error"></div>
+    <input type="password" id="pass-input" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="logo">NUMBER<em>VI</em></div>
+      <span class="badge">Admin</span>
+    </div>
+    <div class="topbar-actions">
+      <a href="/" target="_blank" class="btn btn-secondary" style="font-size:13px;padding:7px 14px;">Ver sitio ↗</a>
+      <button class="btn btn-primary" id="save-btn" onclick="saveAll()" style="padding:7px 18px;">Guardar cambios</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Editar</div>
+      <div class="nav-item active" onclick="showPanel('colors')" id="nav-colors">
+        <span class="icon">🎨</span> Colores
+      </div>
+      <div class="nav-item" onclick="showPanel('hero')" id="nav-hero">
+        <span class="icon">🏠</span> Inicio (Hero)
+      </div>
+      <div class="nav-sep"></div>
+      <div class="sidebar-title">Secciones</div>
+      <div class="nav-item" onclick="showPanel('sections')" id="nav-sections">
+        <span class="icon">📋</span> Gestionar secciones
+      </div>
+      <div class="nav-item" onclick="showPanel('add-section')" id="nav-add-section">
+        <span class="icon">➕</span> Agregar sección
+      </div>
+      <div class="nav-sep"></div>
+      <div class="sidebar-title">Contenido</div>
+      <div class="nav-item" onclick="showPanel('plataformas')" id="nav-plataformas">
+        <span class="icon">💻</span> Plataformas
+      </div>
+      <div class="nav-item" onclick="showPanel('quien')" id="nav-quien">
+        <span class="icon">👤</span> Quién soy
+      </div>
+      <div class="nav-item" onclick="showPanel('contacto')" id="nav-contacto">
+        <span class="icon">✉️</span> Contacto
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <div class="preview-bar">
+        <span>Los cambios se aplican en el sitio al hacer clic en <strong>Guardar cambios</strong></span>
+        <a href="/" target="_blank">Abrir sitio ↗</a>
+      </div>
+
+      <!-- PANEL: COLORES -->
+      <div class="panel active" id="panel-colors">
+        <div class="panel-title">🎨 Colores del sitio</div>
+        <div class="panel-desc">Cambia los colores principales. El color de marca afecta botones, acentos y elementos destacados.</div>
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Paleta principal</div>
+
+          <div class="color-row">
+            <div class="color-preview" id="preview-brand">
+              <input type="color" id="color-brand" oninput="updateColorPreview('brand')"/>
+            </div>
+            <div class="color-info">
+              <div class="color-name">Color de marca (naranja)</div>
+              <div class="color-hex" id="hex-brand">#e87722</div>
+            </div>
+          </div>
+
+          <div class="color-row">
+            <div class="color-preview" id="preview-bg">
+              <input type="color" id="color-bg" oninput="updateColorPreview('bg')"/>
+            </div>
+            <div class="color-info">
+              <div class="color-name">Fondo del sitio</div>
+              <div class="color-hex" id="hex-bg">#07090f</div>
+            </div>
+          </div>
+
+          <p style="font-size:12px;color:var(--muted);margin-top:16px;line-height:1.6;">
+            💡 El color de marca controla botones, números destacados y elementos de acento. El naranja actual (#e87722) cumple con contraste WCAG AA.
+          </p>
+        </div>
+      </div>
+
+      <!-- PANEL: HERO -->
+      <div class="panel" id="panel-hero">
+        <div class="panel-title">🏠 Inicio (Hero)</div>
+        <div class="panel-desc">El texto principal que ven los visitantes al entrar al sitio.</div>
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Textos principales</div>
+          <div class="field">
+            <label>Etiqueta (texto pequeño sobre el título)</label>
+            <input type="text" id="hero-label"/>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Título (primera línea)</label>
+              <input type="text" id="hero-title"/>
+            </div>
+            <div class="field">
+              <label>Título (segunda línea, en naranja)</label>
+              <input type="text" id="hero-title-em"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Subtítulo</label>
+            <textarea id="hero-subtitle" style="min-height:80px;"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Botón principal</label>
+              <input type="text" id="hero-cta-primary"/>
+            </div>
+            <div class="field">
+              <label>Botón secundario</label>
+              <input type="text" id="hero-cta-secondary"/>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Estadísticas (3 cifras)</div>
+          <div id="hero-stats-container"></div>
+        </div>
+      </div>
+
+      <!-- PANEL: SECCIONES -->
+      <div class="panel" id="panel-sections">
+        <div class="panel-title">📋 Gestionar secciones</div>
+        <div class="panel-desc">Activa o desactiva secciones del sitio. Las secciones desactivadas no se muestran a los visitantes.</div>
+        <div id="sections-list"></div>
+      </div>
+
+      <!-- PANEL: AGREGAR SECCIÓN -->
+      <div class="panel" id="panel-add-section">
+        <div class="panel-title">➕ Agregar sección</div>
+        <div class="panel-desc">Elige una plantilla para agregar una nueva sección al sitio. Podrás editar el contenido después de agregarla.</div>
+        <div class="template-grid">
+          <div class="template-card" onclick="addSection('texto')">
+            <div class="template-icon">📝</div>
+            <div class="template-name">Sección de texto</div>
+            <div class="template-desc">Título, subtítulo y párrafo. Ideal para explicar un servicio o agregar información.</div>
+          </div>
+          <div class="template-card" onclick="addSection('cards')">
+            <div class="template-icon">🗂️</div>
+            <div class="template-name">Tarjetas (3 columnas)</div>
+            <div class="template-desc">3 tarjetas con ícono, título y descripción. Ideal para listar servicios o beneficios.</div>
+          </div>
+          <div class="template-card" onclick="addSection('cta')">
+            <div class="template-icon">🎯</div>
+            <div class="template-name">Llamada a la acción</div>
+            <div class="template-desc">Título grande, texto corto y botón. Ideal para cerrar una sección con una acción clara.</div>
+          </div>
+          <div class="template-card" onclick="addSection('lista')">
+            <div class="template-icon">✅</div>
+            <div class="template-name">Lista de servicios</div>
+            <div class="template-desc">Título y una lista de puntos. Ideal para listar lo que incluye un servicio.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: PLATAFORMAS -->
+      <div class="panel" id="panel-plataformas">
+        <div class="panel-title">💻 Plataformas</div>
+        <div class="panel-desc">Edita el contenido de las tarjetas de BID-IA y VigIA.</div>
+        <div id="plataformas-container"></div>
+      </div>
+
+      <!-- PANEL: QUIÉN SOY -->
+      <div class="panel" id="panel-quien">
+        <div class="panel-title">👤 Quién soy</div>
+        <div class="panel-desc">Edita tu nombre, título y biografía.</div>
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Información personal</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Nombre</label>
+              <input type="text" id="quien-name"/>
+            </div>
+            <div class="field">
+              <label>Cargo / Rol</label>
+              <input type="text" id="quien-role"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Biografía</label>
+            <textarea id="quien-bio" style="min-height:160px;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: CONTACTO -->
+      <div class="panel" id="panel-contacto">
+        <div class="panel-title">✉️ Contacto</div>
+        <div class="panel-desc">Edita el email y teléfono que aparecen en la sección de contacto.</div>
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Datos de contacto</div>
+          <div class="field">
+            <label>Email</label>
+            <input type="text" id="contacto-email"/>
+          </div>
+          <div class="field">
+            <label>Teléfono</label>
+            <input type="text" id="contacto-phone"/>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✅</span>
+  <span id="toast-msg">Cambios guardados</span>
+</div>
+
+<script>
+  let SESSION_PASS = '';
+  let content = null;
+
+  // ---- LOGIN ----
+  async function doLogin() {
+    const pass = document.getElementById('pass-input').value;
+    const err = document.getElementById('login-error');
+    if (!pass) return;
+    try {
+      const r = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({password: pass})
+      });
+      if (r.ok) {
+        SESSION_PASS = pass;
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        await loadContent();
+      } else {
+        err.textContent = 'Contraseña incorrecta. Intenta de nuevo.';
+      }
+    } catch(e) {
+      err.textContent = 'Error de conexión. Verifica que el servidor esté corriendo.';
+    }
+  }
+
+  // ---- LOAD CONTENT ----
+  async function loadContent() {
+    const r = await fetch('/api/content');
+    content = await r.json();
+    populateAll();
+  }
+
+  function populateAll() {
+    populateColors();
+    populateHero();
+    populateSections();
+    populatePlataformas();
+    populateQuien();
+    populateContacto();
+  }
+
+  function populateColors() {
+    const c = content.colors;
+    setColorInput('brand', c.brand || '#e87722');
+    setColorInput('bg', c.bg || '#07090f');
+  }
+
+  function setColorInput(id, hex) {
+    const input = document.getElementById('color-' + id);
+    const preview = document.getElementById('preview-' + id);
+    const hexEl = document.getElementById('hex-' + id);
+    input.value = hex;
+    preview.style.background = hex;
+    if (hexEl) hexEl.textContent = hex;
+  }
+
+  function updateColorPreview(id) {
+    const val = document.getElementById('color-' + id).value;
+    const preview = document.getElementById('preview-' + id);
+    const hexEl = document.getElementById('hex-' + id);
+    preview.style.background = val;
+    if (hexEl) hexEl.textContent = val;
+    content.colors[id] = val;
+    // live preview on the admin page itself
+    if (id === 'brand') document.documentElement.style.setProperty('--brand', val);
+    if (id === 'bg') document.documentElement.style.setProperty('--bg', val);
+  }
+
+  function populateHero() {
+    const h = content.hero;
+    document.getElementById('hero-label').value = h.label || '';
+    document.getElementById('hero-title').value = h.title || '';
+    document.getElementById('hero-title-em').value = h.title_em || '';
+    document.getElementById('hero-subtitle').value = h.subtitle || '';
+    document.getElementById('hero-cta-primary').value = h.cta_primary || '';
+    document.getElementById('hero-cta-secondary').value = h.cta_secondary || '';
+
+    // stats
+    const container = document.getElementById('hero-stats-container');
+    container.innerHTML = '';
+    (h.stats || []).forEach((stat, i) => {
+      container.innerHTML += `
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:12px;align-items:center;">
+          <input type="text" value="${stat.num}" placeholder="Cifra" oninput="content.hero.stats[${i}].num=this.value" style="font-weight:700;"/>
+          <input type="text" value="${stat.label}" placeholder="Descripción" oninput="content.hero.stats[${i}].label=this.value"/>
+        </div>`;
+    });
+  }
+
+  function populateSections() {
+    const list = document.getElementById('sections-list');
+    const sectionNames = {
+      resultados: 'Resultados / Pasos',
+      como: 'Cómo lo logramos',
+      plataformas: 'Plataformas (BID-IA / VigIA)',
+      quien: 'Quién soy',
+      contacto: 'Contacto'
+    };
+    list.innerHTML = '';
+    content.sections.forEach((sec, i) => {
+      const name = sectionNames[sec.id] || sec.id;
+      const on = sec.visible !== false;
+      list.innerHTML += `
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-name">${name}</div>
+            <div class="toggle-desc">ID: ${sec.id} · Tipo: ${sec.type}</div>
+          </div>
+          <div class="toggle ${on ? 'on' : ''}" id="toggle-${sec.id}" onclick="toggleSection('${sec.id}', ${i})"></div>
+        </div>`;
+    });
+  }
+
+  function toggleSection(id, index) {
+    content.sections[index].visible = !content.sections[index].visible;
+    const el = document.getElementById('toggle-' + id);
+    el.classList.toggle('on');
+  }
+
+  function addSection(type) {
+    const templates = {
+      texto: {
+        id: 'custom-texto-' + Date.now(),
+        type: 'custom-texto',
+        visible: true,
+        label: 'Nueva sección',
+        title: 'Nuevo título',
+        title_em: '',
+        subtitle: 'Escribe aquí el texto de esta sección.',
+        body: ''
+      },
+      cards: {
+        id: 'custom-cards-' + Date.now(),
+        type: 'custom-cards',
+        visible: true,
+        label: 'Servicios',
+        title: 'Lo que hacemos',
+        title_em: '',
+        subtitle: 'Descripción de los servicios.',
+        items: [
+          { icon: '→', title: 'Servicio 1', desc: 'Descripción del servicio.' },
+          { icon: '→', title: 'Servicio 2', desc: 'Descripción del servicio.' },
+          { icon: '→', title: 'Servicio 3', desc: 'Descripción del servicio.' }
+        ]
+      },
+      cta: {
+        id: 'custom-cta-' + Date.now(),
+        type: 'custom-cta',
+        visible: true,
+        title: '¿Listo para empezar?',
+        subtitle: 'Conversemos sobre tu proyecto.',
+        cta: 'Contactar'
+      },
+      lista: {
+        id: 'custom-lista-' + Date.now(),
+        type: 'custom-lista',
+        visible: true,
+        label: 'Incluye',
+        title: 'Lo que incluye',
+        items: ['Punto 1', 'Punto 2', 'Punto 3', 'Punto 4']
+      }
+    };
+
+    content.sections.push(templates[type]);
+    populateSections();
+    showPanel('sections');
+    showToast('✅', 'Sección agregada. Guarda los cambios para verla en el sitio.', 'success');
+  }
+
+  function populatePlataformas() {
+    const sec = content.sections.find(s => s.id === 'plataformas');
+    if (!sec) return;
+    const container = document.getElementById('plataformas-container');
+    container.innerHTML = '';
+    (sec.items || []).forEach((item, i) => {
+      container.innerHTML += `
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> ${item.name}</div>
+          <div class="field">
+            <label>Badge (etiqueta)</label>
+            <input type="text" value="${item.badge}" oninput="getPlataformas()[${i}].badge=this.value"/>
+          </div>
+          <div class="field">
+            <label>Resultado principal</label>
+            <input type="text" value="${item.result}" oninput="getPlataformas()[${i}].result=this.value"/>
+          </div>
+          <div class="field">
+            <label>Descripción</label>
+            <textarea oninput="getPlataformas()[${i}].desc=this.value">${item.desc}</textarea>
+          </div>
+          <div class="field">
+            <label>Texto del botón</label>
+            <input type="text" value="${item.cta}" oninput="getPlataformas()[${i}].cta=this.value"/>
+          </div>
+        </div>`;
+    });
+  }
+
+  function getPlataformas() {
+    return content.sections.find(s => s.id === 'plataformas').items;
+  }
+
+  function populateQuien() {
+    const sec = content.sections.find(s => s.id === 'quien');
+    if (!sec) return;
+    document.getElementById('quien-name').value = sec.name || '';
+    document.getElementById('quien-role').value = sec.role || '';
+    document.getElementById('quien-bio').value = sec.bio || '';
+  }
+
+  function populateContacto() {
+    const sec = content.sections.find(s => s.id === 'contacto');
+    if (!sec) return;
+    document.getElementById('contacto-email').value = sec.email || '';
+    document.getElementById('contacto-phone').value = sec.phone || '';
+  }
+
+  // ---- COLLECT & SAVE ----
+  function collectAll() {
+    // Hero
+    content.hero.label = document.getElementById('hero-label').value;
+    content.hero.title = document.getElementById('hero-title').value;
+    content.hero.title_em = document.getElementById('hero-title-em').value;
+    content.hero.subtitle = document.getElementById('hero-subtitle').value;
+    content.hero.cta_primary = document.getElementById('hero-cta-primary').value;
+    content.hero.cta_secondary = document.getElementById('hero-cta-secondary').value;
+
+    // Colors already updated live via oninput
+
+    // Quien
+    const quien = content.sections.find(s => s.id === 'quien');
+    if (quien) {
+      quien.name = document.getElementById('quien-name').value;
+      quien.role = document.getElementById('quien-role').value;
+      quien.bio = document.getElementById('quien-bio').value;
+    }
+
+    // Contacto
+    const contacto = content.sections.find(s => s.id === 'contacto');
+    if (contacto) {
+      contacto.email = document.getElementById('contacto-email').value;
+      contacto.phone = document.getElementById('contacto-phone').value;
+    }
+  }
+
+  async function saveAll() {
+    collectAll();
+    const btn = document.getElementById('save-btn');
+    btn.textContent = 'Guardando...';
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/content', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ password: SESSION_PASS, content })
+      });
+      if (r.ok) {
+        showToast('✅', 'Cambios guardados correctamente. El sitio ya está actualizado.', 'success');
+      } else {
+        showToast('❌', 'Error al guardar. Verifica la contraseña.', 'error');
+      }
+    } catch(e) {
+      showToast('❌', 'Error de conexión.', 'error');
+    }
+    btn.textContent = 'Guardar cambios';
+    btn.disabled = false;
+  }
+
+  // ---- UI ----
+  function showPanel(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    document.getElementById('nav-' + id)?.classList.add('active');
+  }
+
+  function showToast(icon, msg, type) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-icon').textContent = icon;
+    document.getElementById('toast-msg').textContent = msg;
+    toast.className = 'toast ' + type;
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>

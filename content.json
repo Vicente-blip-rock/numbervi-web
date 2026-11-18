@@ -1,0 +1,168 @@
+{
+  "colors": {
+    "bg": "#07090f",
+    "brand": "#e87722",
+    "text": "rgba(255,255,255,0.92)",
+    "muted": "rgba(255,255,255,0.55)"
+  },
+  "nav": {
+    "cta_text": "Hablemos"
+  },
+  "hero": {
+    "label": "Lean + IA · Construcción",
+    "title": "Lean e IA",
+    "title_em": "para la construcción.",
+    "subtitle": "De la licitación a la obra. Combinamos experiencia en terreno, mejora continua e inteligencia artificial para que tu equipo estudie licitaciones en menos tiempo, planifique mejor y detecte a tiempo qué puede atrasar la obra.",
+    "cta_primary": "Conversemos sobre tu proyecto",
+    "cta_secondary": "Ver resultados",
+    "stats": [
+      { "num": "-80%", "label": "tiempo en estudio de licitaciones" },
+      { "num": "+15%", "label": "aumento típico de PPC en obras" },
+      { "num": "Medible", "label": "cada mejora tiene un indicador" }
+    ]
+  },
+  "sections": [
+    {
+      "id": "resultados",
+      "type": "steps",
+      "visible": true,
+      "label": "Cómo trabajamos",
+      "title": "De un problema concreto",
+      "title_em": "a una mejora que tu equipo puede medir.",
+      "subtitle": "Tu equipo decide qué quiere mejorar. Nosotros lo acompañamos con experiencia en terreno y metodología Lean para entender qué lo frena, probar un cambio y comprobar si funcionó.",
+      "items": [
+        {
+          "num": "01",
+          "title": "Tu equipo identifica qué lo frena",
+          "desc": "Revisamos cómo trabaja tu equipo hoy — en licitaciones, planificación o gestión de obra — y juntos elegimos qué problema resolver primero.",
+          "tag": "Diagnóstico · Lean · Punto de partida medido"
+        },
+        {
+          "num": "02",
+          "title": "Probamos un cambio con apoyo de IA",
+          "desc": "Mientras trabajamos en la nueva forma de operar, configuramos herramientas de IA adaptadas a tus procesos y datos. Tu equipo verifica la información y decide qué priorizar.",
+          "tag": "IA a medida · BID-IA · VigIA · Proceso probado"
+        },
+        {
+          "num": "03",
+          "title": "Comparamos el resultado y ajustamos",
+          "desc": "Medimos el resultado contra el punto de partida. Si el cambio funciona, lo incorporamos a la rutina. Si hace falta, ajustamos juntos y volvemos a medir.",
+          "tag": "Mejora continua · Rutina instalada · KPI medible"
+        }
+      ]
+    },
+    {
+      "id": "como",
+      "type": "process",
+      "visible": true,
+      "label": "Así trabajamos",
+      "title": "Te acompañamos en terreno",
+      "title_em": "y en oficina.",
+      "subtitle": "Aplicamos Lean para mejorar tu forma de trabajar e integramos herramientas de IA adaptadas a tus procesos cuando pueden facilitar una tarea concreta.",
+      "steps": [
+        {
+          "title": "Revisamos tu operación",
+          "title_em": "",
+          "desc": "Vemos cómo tu equipo estudia licitaciones o planifica la obra. Juntos elegimos qué problema resolver y cómo medir el avance.",
+          "entregable": "Una prioridad clara y un punto de partida medido.",
+          "highlight": null
+        },
+        {
+          "title": "Probamos el cambio contigo",
+          "title_em": "",
+          "desc": "Mientras probamos una nueva forma de trabajar, configuramos la IA según tus necesidades. Tu equipo verifica la información y decide qué priorizar.",
+          "entregable": "Una forma de trabajo probada y, cuando corresponde, una herramienta de IA configurada para tu operación.",
+          "highlight": "En licitaciones, identifica requisitos clave. En obra, resume y agrupa pendientes de las actas."
+        },
+        {
+          "title": "Medimos y consolidamos",
+          "title_em": "",
+          "desc": "Comparamos el resultado con el punto de partida. Si el cambio funciona, lo incorporamos a la rutina del equipo. Si hace falta, lo ajustamos juntos y volvemos a medir.",
+          "entregable": "Una rutina y un indicador para seguir mejorando.",
+          "highlight": null
+        }
+      ],
+      "cta": "Solicitar diagnóstico gratuito"
+    },
+    {
+      "id": "plataformas",
+      "type": "platforms",
+      "visible": true,
+      "label": "Tecnología propia",
+      "title": "Plataformas para",
+      "title_em": "constructoras.",
+      "subtitle": "De la licitación a la obra. Desarrollamos herramientas que se adaptan a la forma de trabajar de tu empresa.",
+      "items": [
+        {
+          "id": "bidia",
+          "badge": "IA aplicada a licitaciones",
+          "name": "BID-IA",
+          "result": "Licitaciones estudiadas en horas, no días",
+          "desc": "Sube una licitación. Conversa con ella. Decide mejor. Transforma bases, EETT, planos, itemizados y anexos en información estructurada para estudiar más rápido, detectar riesgos y preparar mejores ofertas.",
+          "stats": [
+            { "num": "-80%", "label": "tiempo de estudio" },
+            { "num": "5.000+", "label": "páginas analizadas" },
+            { "num": "IA", "label": "especializada" }
+          ],
+          "pills": ["Detecta riesgos contractuales", "Identifica partidas omitidas", "Chat con la licitación", "Presupuesto estructurado"],
+          "cta": "Solicitar demo"
+        },
+        {
+          "id": "vigia",
+          "badge": "Planificación y seguimiento de obra · Last Planner",
+          "name": "VigIA",
+          "result": "Convierte lo que pasó en terreno en el próximo plan semanal",
+          "desc": "Tu equipo registra qué avanzó, qué quedó pendiente y qué puede bloquear las próximas tareas. VigIA ayuda a ordenar esa información con Last Planner System para que el equipo revise las restricciones, asigne responsables y decida qué tareas puede comprometer.",
+          "stats": [
+            { "num": "LPS", "label": "Last Planner System" },
+            { "num": "Kanban", "label": "colaborativo" }
+          ],
+          "pills": ["Lookahead de liberación", "Kanban colaborativo", "Dashboard ILT/PCR", "Trazabilidad de actas"],
+          "cta": "Conocer VigIA"
+        }
+      ]
+    },
+    {
+      "id": "quien",
+      "type": "about",
+      "visible": true,
+      "label": "Quién está detrás",
+      "title": "Experiencia de terreno.",
+      "title_em": "Tecnología propia.",
+      "name": "Vicente Torrealba D.",
+      "role": "Founder · NumberVi",
+      "bio": "He visto obras con datos en tres sistemas distintos y ninguna decisión tomada a tiempo. He visto jefes de proyecto que saben todo de su obra pero no tienen cómo mostrárselo a gerencia. He visto licitaciones estudiadas en dos semanas que podían hacerse en dos días.\n\nLlevo más de 15 años resolviendo eso — primero desde el terreno, ahora también con tecnología propia. Construyo sistemas que hacen que la información llegue a quien la necesita, cuando la necesita, en el formato que permite decidir.\n\nConozco los problemas porque los viví. Y construí las herramientas para resolverlos.",
+      "stats": [
+        { "num": "15+", "label": "años en gestión de proyectos" },
+        { "num": "2–6", "label": "semanas recuperadas por proyecto" },
+        { "num": "+15%", "label": "aumento típico de PPC" },
+        { "num": "Docente", "label": "Lean y Gestión de Proyectos" }
+      ],
+      "creds": ["Constructor Civil · PUC", "MBA", "Lean Construction", "Six Sigma Green Belt", "Last Planner System", "Construction Project Mgmt · Columbia U.", "Data Analysis & Power BI", "BIM", "Generative AI", "Economía Circular · Lund University"]
+    },
+    {
+      "id": "contacto",
+      "type": "contact",
+      "visible": true,
+      "label": "Primer paso",
+      "title": "Conversemos.",
+      "title_em": "Sin costo, sin compromiso.",
+      "subtitle": "Cuéntanos tu problema. Si podemos ayudarte, te decimos cómo. Si no, también.",
+      "email": "vi.torrealba@numbervi.cl",
+      "phone": "+56 9 5864 3000",
+      "services": [
+        "Lean Construction / Last Planner",
+        "Estandarización de procesos",
+        "Dashboards y analítica",
+        "BID-IA — estudio de licitaciones",
+        "VigIA — planificación de obra",
+        "Plataforma a medida",
+        "Capacitación en IA para equipos",
+        "No tengo claro, quiero conversar"
+      ]
+    }
+  ],
+  "footer": {
+    "tagline": "Lean e IA para la Construcción"
+  }
+}
