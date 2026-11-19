@@ -10,6 +10,11 @@ const ADMIN_PASS = process.env.ADMIN_PASS || 'numbervi2024';
 app.use(express.json({ limit: '5mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Ruta sin extensión para el panel admin
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 // Leer contenido
 app.get('/api/content', (req, res) => {
   try {
